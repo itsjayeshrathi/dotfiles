@@ -84,7 +84,7 @@ require("lazy").setup({
 
 require("nvim-tree").setup({
     view={
-        side = "left",
+        side = "right",
         width = 30,
     }
 })    
