@@ -96,7 +96,7 @@ vim.cmd("colorscheme kanagawa") -- Default theme
 -- Gruvbox customization (Optional)
 require("gruvbox").setup({
   contrast = "hard", -- Options: "soft", "medium", "hard"
-  transparent_mode = false,
+  transparent_mode = true,
 })
 
 -- Quick theme switching
