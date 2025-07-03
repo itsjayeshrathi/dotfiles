@@ -32,8 +32,6 @@ filetype plugin indent on
 " General UI settings
 set number              " Show absolute line number on current line
 set relativenumber      " Show relative line numbers for others
-set cursorline          " Highlight the current line
-set ruler               " Show the cursor position
 set wildmenu            " Enhanced command-line completion
 set mouse=a             " Enable mouse support
 set background=dark     " Set background to dark
@@ -55,4 +53,7 @@ set shiftwidth=4        " Indent/outdent by 4 spaces
 set textwidth=76        " Auto-wrap lines at 76 characters
 
 " Error feedback
-set vb                  " Visual bell instead of beeping
+set noerrorbells        " Disable error beeps
+set novisualbell        " Disable screen flashes
+set t_vb=               " Reset terminal visual bell behavior
+
