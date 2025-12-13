@@ -76,9 +76,6 @@ plugins=(
     zsh-autosuggestions
     zsh-syntax-highlighting
     ohmyzsh-full-autoupdate
-    z
-    eza 
-   
 )
 
 
@@ -125,3 +122,7 @@ export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 export BROWSER=/usr/local/bin/wsl-browser
+
+. "$HOME/.atuin/bin/env"
+
+eval "$(atuin init zsh)"

@@ -84,7 +84,7 @@ require("lazy").setup({
 
 -- Theme setup
 vim.o.background = "dark"
-vim.cmd("colorscheme kanagawa")
+vim.cmd("colorscheme gruvbox")
 
 -- Gruvbox theme tweaks
 require("gruvbox").setup({
