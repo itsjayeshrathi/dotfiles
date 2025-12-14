@@ -1,17 +1,33 @@
--- Set leader key
+------------------------------------------------------------
+-- Leader
+------------------------------------------------------------
 vim.g.mapleader = " "
 
--- Basic settings
-vim.opt.number = true
-vim.opt.relativenumber = true
-vim.opt.tabstop = 4
-vim.opt.shiftwidth = 4
-vim.opt.expandtab = true
-vim.opt.termguicolors = true
-vim.opt.cursorline = false
-vim.opt.wrap = false
+------------------------------------------------------------
+-- Basic options
+------------------------------------------------------------
+local opt = vim.opt
+opt.number = true
+opt.relativenumber = true
+opt.tabstop = 4
+opt.shiftwidth = 4
+opt.expandtab = true
+opt.wrap = false
+opt.cursorline = false
+opt.termguicolors = true
+opt.clipboard = "unnamedplus" -- system clipboard
 
--- Install Lazy.nvim if not present
+------------------------------------------------------------
+-- Hide Neovim UI inside tmux
+------------------------------------------------------------
+if vim.env.TMUX then
+  opt.laststatus = 0
+  opt.winbar = ""
+end
+
+------------------------------------------------------------
+-- Lazy.nvim bootstrap
+------------------------------------------------------------
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -19,38 +35,40 @@ if not vim.loop.fs_stat(lazypath) then
     "https://github.com/folke/lazy.nvim.git", lazypath
   })
 end
-vim.opt.rtp:prepend(lazypath)
+opt.rtp:prepend(lazypath)
 
--- Load plugins
+------------------------------------------------------------
+-- Plugins
+------------------------------------------------------------
 require("lazy").setup({
-  -- File Explorer
-  { "nvim-tree/nvim-tree.lua", dependencies = { "nvim-tree/nvim-web-devicons" }},
-  -- Status Line
-  { "nvim-lualine/lualine.nvim", dependencies = { "nvim-tree/nvim-web-devicons" }},
-  -- Fuzzy Finder
-  { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" }},
-  -- Syntax Highlighting & Playground
+  { "nvim-tree/nvim-tree.lua",         dependencies = { "nvim-tree/nvim-web-devicons" } },
+
+  {
+    "nvim-lualine/lualine.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    enabled = not vim.env.TMUX,
+  },
+
+  { "nvim-telescope/telescope.nvim",   dependencies = { "nvim-lua/plenary.nvim" } },
+
   { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
   { "nvim-treesitter/playground" },
-  -- LSP
+
   { "neovim/nvim-lspconfig" },
-  -- Autocompletion
+
   {
     "hrsh7th/nvim-cmp",
     dependencies = {
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-nvim-lsp",
-      "hrsh7th/cmp-nvim-lua",
-      "hrsh7th/cmp-cmdline",
       "L3MON4D3/LuaSnip",
       "saadparwaiz1/cmp_luasnip",
-      "rafamadriz/friendly-snippets"
+      "rafamadriz/friendly-snippets",
     },
     config = function()
       local cmp = require("cmp")
       local luasnip = require("luasnip")
-
       require("luasnip.loaders.from_vscode").lazy_load()
 
       cmp.setup({
@@ -65,95 +83,90 @@ require("lazy").setup({
           ["<Tab>"] = cmp.mapping.select_next_item(),
           ["<S-Tab>"] = cmp.mapping.select_prev_item(),
         }),
-        sources = cmp.config.sources({
+        sources = {
           { name = "luasnip" },
           { name = "buffer" },
           { name = "path" },
-        }),
+        },
       })
     end,
   },
-  -- Git Integration
+
   { "tpope/vim-fugitive" },
-  -- Themes
-  { "folke/tokyonight.nvim" },
+
   { "ellisonleao/gruvbox.nvim" },
-  { "rebelot/kanagawa.nvim" },
-  { "hashicorp/sentinel.vim" },
 })
 
--- Theme setup
+------------------------------------------------------------
+-- Theme (transparent)
+------------------------------------------------------------
 vim.o.background = "dark"
-vim.cmd("colorscheme gruvbox")
-
--- Gruvbox theme tweaks
 require("gruvbox").setup({
   contrast = "hard",
   transparent_mode = true,
 })
+vim.cmd("colorscheme gruvbox")
 
--- Treesitter setup
+vim.cmd([[
+  highlight Normal       guibg=none ctermbg=none
+  highlight NormalFloat  guibg=none ctermbg=none
+  highlight SignColumn   guibg=none ctermbg=none
+  highlight EndOfBuffer  guibg=none ctermbg=none
+]])
+
+------------------------------------------------------------
+-- Treesitter
+------------------------------------------------------------
 require("nvim-treesitter.configs").setup({
   highlight = { enable = true },
   indent = { enable = true },
-  playground = {
-    enable = true,
-    updatetime = 25,
-    persist_queries = false,
-  },
+  playground = { enable = true },
 })
 
--- File explorer setup
+------------------------------------------------------------
+-- Nvim-tree
+------------------------------------------------------------
 require("nvim-tree").setup({
   view = {
     side = "right",
     width = 30,
-  }
+  },
 })
 
-vim.api.nvim_create_autocmd("BufWinEnter", {
-  pattern = "TSPlayground",
-  callback = function()
-    vim.cmd("wincmd L") -- Move window to the far right
-  end,
-})
+------------------------------------------------------------
+-- Lualine (only outside tmux)
+------------------------------------------------------------
+if not vim.env.TMUX then
+  require("lualine").setup({
+    options = {
+      globalstatus = true,
+      section_separators = "",
+      component_separators = "",
+    },
+  })
+end
 
+------------------------------------------------------------
+-- Keymaps
+------------------------------------------------------------
+local map = vim.keymap.set
 
+-- Explorer / search
+map("n", "<leader>e", ":NvimTreeToggle<CR>", { silent = true })
+map("n", "<leader>ff", ":Telescope find_files<CR>", { silent = true })
+map("n", "<leader>fg", ":Telescope live_grep<CR>", { silent = true })
+map("n", "<leader>fb", ":Telescope buffers<CR>", { silent = true })
 
--- Status line
-require("lualine").setup()
-
--- Keybindings
-
--- File/tree/telescope
-vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>", { silent = true })
-vim.keymap.set("n", "<leader>ff", ":Telescope find_files<CR>", { silent = true })
-vim.keymap.set("n", "<leader>fg", ":Telescope live_grep<CR>", { silent = true })
-vim.keymap.set("n", "<leader>fb", ":Telescope buffers<CR>", { silent = true })
-
--- Tree-sitter playground
-vim.keymap.set("n", "<leader>tp", ":TSPlaygroundToggle<CR>", { silent = true, desc = "Toggle TS Playground" })
-
--- Theme switching
-vim.keymap.set("n", "<leader>tg", ":colorscheme gruvbox<CR>", { silent = true })
-vim.keymap.set("n", "<leader>tt", ":colorscheme tokyonight<CR>", { silent = true })
+-- Treesitter playground
+map("n", "<leader>tp", ":TSPlaygroundToggle<CR>", { silent = true })
 
 -- Window navigation
-vim.keymap.set("n", "<C-h>", "<C-w>h", { silent = true })
-vim.keymap.set("n", "<C-j>", "<C-w>j", { silent = true })
-vim.keymap.set("n", "<C-k>", "<C-w>k", { silent = true })
-vim.keymap.set("n", "<C-l>", "<C-w>l", { silent = true })
+map("n", "<C-h>", "<C-w>h", { silent = true })
+map("n", "<C-j>", "<C-w>j", { silent = true })
+map("n", "<C-k>", "<C-w>k", { silent = true })
+map("n", "<C-l>", "<C-w>l", { silent = true })
 
--- Tab navigation
-vim.keymap.set("n", "<leader>tn", ":tabnew<CR>", { silent = true })
-vim.keymap.set("n", "<leader>to", ":tabonly<CR>", { silent = true })
-vim.keymap.set("n", "<leader>tc", ":tabclose<CR>", { silent = true })
-vim.keymap.set("n", "<leader>tp", ":tabprevious<CR>", { silent = true })
-vim.keymap.set("n", "<leader>tn", ":tabnext<CR>", { silent = true })
+-- Reload config
+map("n", "<leader><leader>", ":luafile %<CR>", { silent = true })
 
--- Reload current file
-vim.keymap.set("n", "<leader><leader>", ":luafile %<CR>", { silent = true })
-
--- Notify ready
-print("Neovim is ready! 🚀")
-
+print("Neovim ready.")
