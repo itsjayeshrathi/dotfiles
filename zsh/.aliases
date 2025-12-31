@@ -1,6 +1,0 @@
-alias cd="z"
-alias ls="eza"
-alias cat="batcat"
-alias python="python3"
-alias cls="clear"
-alias update='sudo apt update && sudo apt upgrade -y'

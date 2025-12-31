@@ -2,7 +2,7 @@
     path = ~/.gitconfig.local
 
 [user]
-	name = Jayesh Rathi
+	name = itsjayeshrathi
 	email = itsjayeshrathi@gmail.com
 
 [init]
@@ -14,3 +14,7 @@
     br = branch
     ci = commit 
     lg = log --oneline --graph --decorate
+[pull]
+	rebase = true
+[rebase]
+	autoStash = true

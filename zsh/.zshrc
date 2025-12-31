@@ -7,7 +7,7 @@ plugins=(
   zsh-syntax-highlighting
 )
 
-source $ZSH/oh-my-zsh.sh
+source "$ZSH"/oh-my-zsh.sh
 
 
 export GOROOT=/usr/local/go
@@ -27,5 +27,5 @@ eval "$(zoxide init zsh)"
 . "$HOME/.atuin/bin/env"
 eval "$(atuin init zsh)"
 
-
-source ~/dotfiles/zsh/.aliases
+alias cd="z"
+alias ls="eza"
