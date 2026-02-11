@@ -18,7 +18,6 @@ set shiftwidth=4   " shift 4 spaces
 set textwidth=76
 set wildmenu
 set mouse=a        " allow mouse
-set cursorline     " highlights/underlines current line
 set ruler          " shows cursor position
 
 set background=dark

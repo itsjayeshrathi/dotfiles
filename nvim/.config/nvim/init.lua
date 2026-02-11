@@ -82,7 +82,7 @@ require("lazy").setup({
           ["<CR>"] = cmp.mapping.confirm({ select = true }),
           ["<Tab>"] = cmp.mapping.select_next_item(),
           ["<S-Tab>"] = cmp.mapping.select_prev_item(),
-        }),
+       }),
         sources = {
           { name = "luasnip" },
           { name = "buffer" },
@@ -168,5 +168,3 @@ map("n", "<C-l>", "<C-w>l", { silent = true })
 
 -- Reload config
 map("n", "<leader><leader>", ":luafile %<CR>", { silent = true })
-
-print("Neovim ready.")
