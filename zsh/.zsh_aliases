@@ -1,0 +1,66 @@
+# System
+alias sup="sudo apt update && sudo apt upgrade -y"
+alias yep='sudo apt install $1'
+alias nop='sudo apt remove $1'
+alias c='clear'
+alias h='history'
+alias hg='history | grep $1'
+
+# Listing
+alias ls="eza"
+alias ll='ls -la'
+alias lf='ls -alF'
+alias la='ls -A'
+alias lt='ls -t -1 -long'
+alias lu='du -sh * | sort -h'
+alias lc='find . -type f | wc -l'
+alias ld='ls -d */'
+alias lsize='ls --human-readable --size -1 -S --classify'
+
+# Navigation
+alias cd="z"
+alias ..='cd ..'
+alias ....='cd ../..'
+alias 1d="cd .."
+alias 2d="cd ../.."
+alias 3d="cd ../../.."
+alias 4d="cd ../../../.."
+alias 5d="cd ../../../../.."
+alias fh='find . -name '
+
+# Archives
+alias untar='tar -zxvf $1'
+alias mktar='tar -czvf $1'
+
+# Disk / Mount
+alias mnt="mount | awk -F' ' '{ printf \"%s\t%s\n\",\$1,\$3; }' | column -t | egrep ^/dev/ | sort"
+alias df="df -Tha --total"
+
+# Git
+alias gs='git status'
+alias gb='git branch'
+alias gr='git remote -v'
+alias gl='git log --oneline'
+alias glc="git log --format=format: --name-only --since=12.month | egrep -v '^$' | sort | uniq -c | sort -nr | head -50"
+alias gld='git log --oneline --decorate --graph --all'
+alias glp="git log -g --grep='PHP' -10 --pretty='%h - %s - %cn - %cd'"
+alias glf='git for-each-ref --sort=-committerdate'
+alias gpom='git push origin main'
+
+# File extension shortcuts
+alias -s json=jless
+alias -s md=bat
+alias -s txt=bat
+alias -s log=bat
+alias -s go='$EDITOR'
+alias -s rs='$EDITOR'
+alias -s py='$EDITOR'
+alias -s js='$EDITOR'
+alias -s ts='$EDITOR'
+
+# Global aliases
+alias -g NE='2>/dev/null'
+alias -g NO='>/dev/null'
+alias -g NUL='>/dev/null 2>&1'
+alias -g J='| jq'
+
