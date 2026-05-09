@@ -1,0 +1,20 @@
+[include]
+    path = ~/.gitconfig.local
+
+[user]
+	name = itsjayeshrathi
+	email = itsjayeshrathi@gmail.com
+
+[init]
+    defaultBranch = main
+
+[alias]
+    st = status
+    co = checkout 
+    br = branch
+    ci = commit 
+    lg = log --oneline --graph --decorate
+[pull]
+	rebase = true
+[rebase]
+	autoStash = true
